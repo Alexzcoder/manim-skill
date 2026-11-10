@@ -1,0 +1,6 @@
+media/
+.venv/
+__pycache__/
+audio/
+*.mp4
+examples/narrated.py

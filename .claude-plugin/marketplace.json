@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "manim-skill",
+  "description": "Narrated explainer videos with Manim, from one skill.",
+  "owner": {
+    "name": "Alexzcoder",
+    "url": "https://github.com/Alexzcoder"
+  },
+  "plugins": [
+    {
+      "name": "manim",
+      "description": "Script, animate, narrate, caption and render an explainer video with Manim.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}

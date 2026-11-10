@@ -1,0 +1,9 @@
+{
+  "name": "manim",
+  "version": "1.0.0",
+  "description": "Turn a topic and its sources into a narrated Manim explainer video with voice and phrase-by-phrase captions.",
+  "author": {
+    "name": "Alexzcoder",
+    "url": "https://github.com/Alexzcoder"
+  }
+}
