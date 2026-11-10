@@ -109,26 +109,16 @@ Any text-to-speech tool works for the clips: one MP3 per line, numbered in order
 | [`skills/manim/review.sh`](skills/manim/review.sh) | Contact sheets, duration and audio check for a rendered video |
 | [`skills/manim/fetch_clips.sh`](skills/manim/fetch_clips.sh) | Downloads narration clips from signed URLs |
 | [`skills/manim/speed.sh`](skills/manim/speed.sh) | Faster cut with pitch preserved |
-| [`skills/manim/progress.sh`](skills/manim/progress.sh) | Review copy with a progress bar along the bottom edge |
+| [`skills/manim/watch_render.sh`](skills/manim/watch_render.sh) | Live progress bar and time left for a running render |
 
-## How this was built
+## What the skill already knows
 
-The skill is a write-up of one long session, not a design exercise. The task was a ten-minute explainer for a university project, starting from a Manim draft that had never been rendered. What happened, in order:
+Things that are slow to discover and are written into the skill, so the agent does not relearn them:
 
-1. **The draft rendered first time, and looked wrong.** No errors, but captions ran under axis labels, a legend ran off the frame, and coloured text bled into the next word. None of that shows up in a log. The fix was to stop trusting "it rendered" and look: tile a frame every six seconds into contact sheets and read them all. That became `review.sh`.
-2. **Every number was checked against the source PDFs,** including the ones that only appear inside charts. Two examples in the draft turned out to be illustrative and were not labelled. They are now.
-3. **Voice came from an ElevenLabs connector, not an API key.** 58 narration lines became 58 clips (about 8,750 characters). The scene reads each clip's length and stretches the beat to fit, so nothing is cut off and the longest silence in the final video is 1.7 seconds.
-4. **Feedback after the first watch: "this is just lots of graphs."** Fair. The topic was a bus network, and the video never showed a bus. The data had real route geometry, so the next version draws all 234 lines as a map, with vehicles moving along them. Same narration, no new voice cost. That became the "show the subject" rule.
-5. **Captions went from a block of text to one phrase at a time.** Each clip is scanned for pauses and phrase changes snap to them; 125 of 170 changes landed on a real pause.
-
-### Things that cost time
-
-- A dot for each of 2,210 buses made the render crawl. Merging them into about 36 shapes fixed it with no visible change.
-- A caption that updates every frame stops Manim from reusing still frames, and a 13-minute render became much longer. Captions now switch by hand between static waits.
-- Swapping a group's submobjects left stale captions stuck on screen. Keeping every phrase in the group and moving the unused ones off screen does not.
-- `pkill -f "manim ..."` kills the shell that typed it.
-
-All of these are in the skill's gotcha list, so the agent does not rediscover them.
+- "It rendered" is not "it looks right". The agent tiles a frame every few seconds into contact sheets and reads them all before the final render.
+- Thousands of small shapes make the render crawl. Merging them into a few shapes fixes it with no visible change.
+- A caption that updates every frame stops Manim from reusing still frames. Captions switch between static waits.
+- Narration never needs regenerating for a visual change: clips are numbered files, and the scene reads their length.
 
 ## Limits
 

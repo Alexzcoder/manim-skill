@@ -20,7 +20,7 @@ manual install, or the plugin's `skills/manim` folder):
 - `fetch_clips.sh`: downloads narration clips from signed URLs.
 - `review.sh`: contact sheets + duration + audio check for a rendered video.
 - `speed.sh`: speed-up (default 1.75x) with pitch preserved.
-- `progress.sh`: review copy with a progress bar burned along the bottom edge.
+- `watch_render.sh`: live progress bar for a running render (for the user to run).
 
 ## Rules that hold for every video
 
@@ -82,6 +82,10 @@ manual install, or the plugin's `skills/manim` folder):
    NARRATION_AUDIO_DIR=audio .venv/bin/manim -qh --disable_caching scene.py MyVideo   # 1080p60, run in background
    $SKILL/review.sh media/videos/scene/1080p60/MyVideo.mp4 <scratch>/final
    ```
+   Send the `-qh` render's output to a log file. Get the animation count from a `--dry_run`
+   with the same audio dir ("Played N animations"), then give the user this to run in a
+   second terminal for a live bar with time left: `$SKILL/watch_render.sh render.log N`.
+   When they ask how far along it is, report `grep -c "movie file written" render.log` of N.
    Confirm: no errors in the log, duration in range, audio present (mean volume around
    -28 dB), no pause longer than ~2 s, spot-check frames. A 10-minute video takes roughly
    10-15 minutes to render at `-qh`.
@@ -89,8 +93,6 @@ manual install, or the plugin's `skills/manim` folder):
 7. **Deliver.** Copy the MP4 to the user's Downloads folder (on WSL:
    `/mnt/c/Users/<user>/Downloads/`) and verify the copy with `cmp`. If asked for a faster
    cut: `$SKILL/speed.sh in.mp4 out.mp4 1.75` and deliver both.
-   If asked for a progress bar: `$SKILL/progress.sh in.mp4 out_progress.mp4`, as a separate
-   copy; the clean file stays the one to share.
    Report: paths, duration, credits spent, what was checked, and what was not (you cannot
    listen to the audio, so pronunciation is unverified).
 
